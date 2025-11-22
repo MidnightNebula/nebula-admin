@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Field, FieldGroup } from "@/components/ui/field";
-import { signIn, useSession } from "@/lib/authClient";
+import { signIn } from "@/lib/authClient";
 import { useState } from "react";
 import { Alert, AlertTitle } from "./ui/alert";
 
