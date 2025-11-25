@@ -1,45 +1,46 @@
-"use client";
+'use client';
 
-import { DEFAULT_THEME } from "@/app/shared/constants";
-import {
-  createContext,
-  ReactNode,
-  useCallback,
-  useMemo,
-  useState,
-} from "react";
+import { createContext, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 
-export type ContextProviderProps = {
-  children: ReactNode;
+export const localStorageThemeKey = 'theme';
+
+enum ThemeType {
+  dark = 'dark',
+  light = 'light',
+}
+
+export type Theme = keyof typeof ThemeType;
+
+export type ThemeContextProps = {
+  theme: Theme;
+  handleChangeTheme: (value: Theme) => void;
 };
 
-export type ThemeType = {
-  theme: string;
-  handleChangeTheme: (value: string) => void;
-};
+export const ThemeContext = createContext<ThemeContextProps>({
+  theme: 'light',
+  handleChangeTheme: () => {},
+});
 
-export const Context = createContext<ThemeType | null>(null);
-
-export const ContextProvider = ({ children }: ContextProviderProps) => {
-  const [theme, setTheme] = useState<string>(DEFAULT_THEME);
+export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
+  const [theme, setTheme] = useState<Theme>(ThemeType.light);
 
   const handleChangeTheme = useCallback(
-    (value: string) => {
-      localStorage.setItem("theme", value);
+    (value: Theme) => {
+      localStorage.setItem(localStorageThemeKey, value);
       if (value !== theme) document.documentElement.classList.remove(theme);
       document.documentElement.classList.add(value);
       setTheme(value);
     },
-    [theme, setTheme]
+    [theme, setTheme],
   );
 
-  const contextValue = useMemo(
+  const value = useMemo(
     () => ({
       theme,
       handleChangeTheme,
     }),
-    [theme, handleChangeTheme]
+    [theme, handleChangeTheme],
   );
 
-  return <Context.Provider value={contextValue}>{children}</Context.Provider>;
+  return <ThemeContext value={value}>{children}</ThemeContext>;
 };

@@ -1,13 +1,16 @@
-import { getSession } from "./authClient";
+import { headers } from 'next/headers';
 
 export async function getUser() {
-  const { data: user, error } = await getSession();
+  try {
+    const response = await fetch('http://localhost:4000/api/getUser', {
+      credentials: 'include',
+      headers: await headers(),
+    });
 
-  if (error) {
-    return error.message;
-  }
-
-  if (user) {
-    return user;
+    const { data } = await response.json();
+    if (!data) return null;
+    return data.user;
+  } catch (err) {
+    return null;
   }
 }

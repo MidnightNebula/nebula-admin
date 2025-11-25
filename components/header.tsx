@@ -1,63 +1,51 @@
-"use client";
+'use client';
 
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Button } from "./ui/button";
-import Image from "next/image";
-import { signOut, useSession } from "@/lib/authClient";
-import { redirect } from "next/navigation";
-import { useChangeTheme } from "@/lib/useChangeTheme";
-import { DEFAULT_THEME } from "@/app/shared/constants";
+import { useContext } from 'react';
+import Image from 'next/image';
+import { redirect } from 'next/navigation';
+import { DEFAULT_THEME } from '@/app/shared/constants';
+import { ThemeContext, type ThemeContextProps } from '@/app/shared/providers/theme-provider';
 
-export function Header() {
-  const { data: session } = useSession();
-  const { theme, changeTheme } = useChangeTheme();
+import { signOut, User, useSession } from '@/lib/authClient';
 
-  const newTheme = theme === DEFAULT_THEME ? "dark" : DEFAULT_THEME;
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import { Button } from './ui/button';
+
+export function Header({ user }: { user: User | null }) {
+  const { theme, handleChangeTheme } = useContext<ThemeContextProps>(ThemeContext);
+
+  const newTheme = theme === 'light' ? 'dark' : DEFAULT_THEME;
 
   return (
     <div className="flex items-center justify-end gap-0.5">
-      {session?.user ? (
+      <Button
+        onClick={() => {
+          handleChangeTheme(newTheme);
+        }}
+      >
+        Change theme
+      </Button>
+      {user ? (
         <>
-          <Button
-            onClick={() => {
-              changeTheme(newTheme);
-            }}
-          >
-            Change theme
-          </Button>
           <Button
             onClick={() =>
               signOut({
                 fetchOptions: {
-                  onSuccess: () => redirect("/login"),
-                  onError: () => console.log("Server is not active"),
+                  onSuccess: () => redirect('/login'),
+                  onError: () => console.log('Server is not active'),
                 },
               })
             }
           >
-            <Image
-              className="font-bold"
-              src="/sign-out.svg"
-              alt="sign-out button"
-              width={60}
-              height={60}
-            />
+            Sign Out
           </Button>
           <Avatar>
-            <AvatarImage src={session.user.image || ""} />
-            <AvatarFallback>signout</AvatarFallback>
+            <AvatarImage src={user.image || ''} />
           </Avatar>
         </>
       ) : (
         <>
-          <Button
-            onClick={() => {
-              changeTheme(newTheme);
-            }}
-          >
-            Change theme
-          </Button>
-          <Button onClick={() => redirect("/login")}>Sign in</Button>
+          <Button onClick={() => redirect('/login')}>Sign in</Button>
         </>
       )}
     </div>
