@@ -1,13 +1,43 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Field, FieldGroup } from "@/components/ui/field";
+import { signIn, useSession } from "@/lib/authClient";
+import { useState } from "react";
+import { Alert, AlertTitle } from "./ui/alert";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
+  const [isPending, setIsPending] = useState(false);
+  const [error, setIsError] = useState<string | null>(null);
+  console.log(isPending);
   return (
-    <form className={cn("flex flex-col gap-6", className)} {...props}>
+    <form
+      className={cn("flex flex-col gap-6", className)}
+      {...props}
+      onSubmit={async (e) => {
+        e.preventDefault();
+        setIsError(null);
+        try {
+          await signIn.social(
+            {
+              provider: "discord",
+              callbackURL: window.location.origin,
+            },
+            {
+              onRequest: () => setIsPending(true),
+              onSuccess: () => setIsPending(false),
+            }
+          );
+        } catch (error) {
+          setIsPending(false);
+          setIsError("Fetching is error");
+        }
+      }}
+    >
       <FieldGroup>
         <div className="flex flex-col items-center gap-1 text-center">
           <h1 className="text-2xl font-bold">
@@ -21,6 +51,7 @@ export function LoginForm({
             className="cursor-pointer"
             variant="outline"
             type="submit"
+            disabled={isPending}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -31,6 +62,11 @@ export function LoginForm({
             </svg>
             Login with Discord
           </Button>
+          {error && (
+            <Alert className="border-none p-2" variant="destructive">
+              <AlertTitle className="text-center">{error}</AlertTitle>
+            </Alert>
+          )}
         </Field>
       </FieldGroup>
     </form>
