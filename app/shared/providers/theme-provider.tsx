@@ -4,7 +4,7 @@ import { createContext, ReactNode, useCallback, useEffect, useMemo, useState } f
 
 export const localStorageThemeKey = 'theme';
 
-enum ThemeType {
+export enum ThemeType {
   dark = 'dark',
   light = 'light',
 }
@@ -17,7 +17,7 @@ export type ThemeContextProps = {
 };
 
 export const ThemeContext = createContext<ThemeContextProps>({
-  theme: 'light',
+  theme: ThemeType.light,
   handleChangeTheme: () => {},
 });
 

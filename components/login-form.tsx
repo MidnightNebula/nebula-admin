@@ -13,9 +13,6 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'form'>)
   const [isPending, setIsPending] = useState(false);
   const [error, setIsError] = useState<string | null>(null);
 
-  console.log('error:', error);
-  console.log('isPending:', isPending);
-
   return (
     <form
       className={cn('flex flex-col gap-6', className)}

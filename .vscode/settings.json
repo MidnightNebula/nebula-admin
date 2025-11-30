@@ -2,7 +2,11 @@
   "files.associations": {
     "*.css": "tailwindcss"
   },
+  "javascript.suggest.autoImports": true,
+  "typescript.suggest.autoImports": true,
   "editor.quickSuggestions": {
-    "strings": "on"
+        "other": true,
+    "comments": false,
+    "strings": true
   }
 }
