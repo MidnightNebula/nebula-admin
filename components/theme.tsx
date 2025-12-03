@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 
 export const localStorageThemeKey = 'theme';
 
@@ -12,7 +12,7 @@ enum ThemeType {
 export type Theme = keyof typeof ThemeType;
 
 export const ThemeToggle = () => {
-  const [theme, setTheme] = useState<Theme | string>(localStorage.getItem(localStorageThemeKey) || ThemeType.light);
+  const [theme, setTheme] = useState<Theme>(ThemeType.light);
 
   const handleChangeTheme = useCallback(
     (value: Theme) => {
@@ -24,6 +24,16 @@ export const ThemeToggle = () => {
     [theme, setTheme],
   );
 
+    useEffect(() => {
+    const current = localStorage.getItem(localStorageThemeKey)
+
+    if (current) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      handleChangeTheme(current as ThemeType)
+      return
+    }
+    return
+  }, [])
   return (
     <button
       onClick={() => handleChangeTheme(theme === ThemeType.light ? ThemeType.dark : ThemeType.light)}

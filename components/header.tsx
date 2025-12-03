@@ -1,7 +1,7 @@
 'use client';
 
 import { redirect } from 'next/navigation';
-import { ThemeToggle } from '@/app/shared/providers/theme-provider';
+import { ThemeToggle } from '@/components/theme';
 
 import { signOut, User } from '@/lib/authClient';
 
