@@ -13,9 +13,6 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'form'>)
   const [isPending, setIsPending] = useState(false);
   const [error, setIsError] = useState<string | null>(null);
 
-  console.log('error:', error);
-  console.log('isPending:', isPending);
-
   return (
     <form
       className={cn('flex flex-col gap-6', className)}
@@ -28,11 +25,16 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'form'>)
             {
               provider: 'discord',
               callbackURL: window.location.origin,
+
             },
             {
-              onRequest: () => setIsPending(true),
+              onRequest: () => {
+                setIsError(null);
+                setIsPending(true);
+              },
               onSuccess: () => setIsPending(false),
               onError: error => {
+                console.log("signIn error:", error)
                 setIsError(error.error.message);
                 setIsPending(false);
               },
@@ -41,6 +43,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'form'>)
         } catch (error) {
           setIsPending(false);
           setIsError('Fetching is error');
+          console.log(error)
         }
       }}
     >

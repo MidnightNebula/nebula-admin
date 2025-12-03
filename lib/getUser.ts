@@ -1,16 +1,21 @@
 import { headers } from 'next/headers';
+import { getSession } from './authClient';
+import { APIError } from 'better-auth';
 
 export async function getUser() {
   try {
-    const response = await fetch('http://localhost:4000/api/getUser', {
-      credentials: 'include',
-      headers: await headers(),
-    });
+    const {data: session} = await getSession({
+      fetchOptions: {
+        credentials: 'include',
+        headers: await headers(),
+      }
+    })
+    console.log("getUser response:", session)
+    if (!session) return null;
 
-    const { data } = await response.json();
-    if (!data) return null;
-    return data.user;
+    return session.user;
   } catch (err) {
-    return null;
+    console.log('getUser error:', err)
+    throw new APIError('UNAUTHORIZED', {message: 'User is not found'})
   }
 }

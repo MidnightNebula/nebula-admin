@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 export const localStorageThemeKey = 'theme';
 
@@ -16,12 +16,7 @@ export type ThemeContextProps = {
   handleChangeTheme: (value: Theme) => void;
 };
 
-export const ThemeContext = createContext<ThemeContextProps>({
-  theme: 'light',
-  handleChangeTheme: () => {},
-});
-
-export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
+export const ThemeToggle = () => {
   const [theme, setTheme] = useState<Theme>(ThemeType.light);
 
   const handleChangeTheme = useCallback(
@@ -34,13 +29,22 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     [theme, setTheme],
   );
 
-  const value = useMemo(
-    () => ({
-      theme,
-      handleChangeTheme,
-    }),
-    [theme, handleChangeTheme],
+  return (
+    <button
+      onClick={() => handleChangeTheme(theme === ThemeType.light ? ThemeType.dark : ThemeType.light)}
+      aria-label="Toggle theme"
+      className="
+        relative flex h-10 w-10 items-center justify-center 
+        rounded-full bg-gray-200 hover:bg-gray-300
+        dark:bg-gray-700 dark:hover:bg-gray-600 
+        transition-colors
+      "
+    >
+      {theme === ThemeType.light ? (
+        <span className="text-yellow-600 text-xl">☀️</span>
+      ) : (
+        <span className="text-blue-300 text-xl">🌙</span>
+      )}
+    </button>
   );
-
-  return <ThemeContext value={value}>{children}</ThemeContext>;
 };

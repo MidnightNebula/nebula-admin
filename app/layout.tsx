@@ -1,8 +1,6 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 
-import { ThemeProvider } from './shared/providers/theme-provider';
-
 import './globals.css';
 
 const geistSans = Geist({
@@ -26,33 +24,31 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ThemeProvider>
-      <html lang="en" suppressHydrationWarning>
-        <head />
-        <body
-          className={`dark:bg-gray-900 p-5 ${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-                (function() {
-                  try {
-                    var theme = localStorage.getItem('theme');
-                    console.log(theme)
-                    if (theme === 'dark') {
-                      document.documentElement.classList.add('dark');
-                    } else {
-                      document.documentElement.classList.remove('dark');
-                    }
-                  } catch (e) {}
-                })();
-              `,
-            }}
-          />
+    <html lang="en" suppressHydrationWarning>
+      <head />
+      <body
+        className={`dark:bg-gray-900 p-5 ${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var theme = localStorage.getItem('theme');
+                  console.log(theme)
+                  if (theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                  } else {
+                    document.documentElement.classList.remove('dark');
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
 
-          {children}
-        </body>
-      </html>
-    </ThemeProvider>
+        {children}
+      </body>
+    </html>
   );
 }
