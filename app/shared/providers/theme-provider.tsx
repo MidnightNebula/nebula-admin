@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export const localStorageThemeKey = 'theme';
 
@@ -11,13 +11,8 @@ enum ThemeType {
 
 export type Theme = keyof typeof ThemeType;
 
-export type ThemeContextProps = {
-  theme: Theme;
-  handleChangeTheme: (value: Theme) => void;
-};
-
 export const ThemeToggle = () => {
-  const [theme, setTheme] = useState<Theme>(ThemeType.light);
+  const [theme, setTheme] = useState<Theme | string>(localStorage.getItem(localStorageThemeKey) || ThemeType.light);
 
   const handleChangeTheme = useCallback(
     (value: Theme) => {
