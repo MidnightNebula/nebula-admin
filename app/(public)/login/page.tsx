@@ -1,9 +1,8 @@
-'use client';
+"use client";
 
-import { LoginForm } from '@/components/login-form';
+import { LoginForm } from "@/app/(public)/login/_shared/components/LoginForm";
 
 export default function Login() {
-
   return (
     <div className="grid items-center min-h-svh">
       <div className="flex flex-col gap-4 p-6 md:p-10">
