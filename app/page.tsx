@@ -19,7 +19,7 @@ export default function Home() {
 
   return (
     <>
-      <Header user={session.user} />
+      <Header user={{ ...session.user, image: null }} />
     </>
   );
 }
