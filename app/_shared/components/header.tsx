@@ -13,7 +13,7 @@ export function Header({ user }: { user: User }) {
   return (
     <div className="flex items-center justify-end gap-0.5">
       <Theme />
-      {user ? (
+      {user && (
         <>
           <Button
             onClick={() =>
@@ -32,10 +32,6 @@ export function Header({ user }: { user: User }) {
               src={user.image || `https://cdn.discordapp.com/embed/avatars/${(Number(user.id) >> 22) % 6}.png`}
             />
           </Avatar>
-        </>
-      ) : (
-        <>
-          <Button onClick={() => router.push('/login')}>Sign in</Button>
         </>
       )}
     </div>

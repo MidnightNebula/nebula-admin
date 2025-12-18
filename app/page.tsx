@@ -11,7 +11,7 @@ export default function Home() {
   const { data: session, isPending, error } = useSession();
 
   if (isPending) return <LoadingSpinner />;
-  if (error) throw new Error(error.message);
+  if (error) throw new Error('Fetching failed');
   if (!session) {
     router.replace('/login');
     return;
