@@ -25,6 +25,7 @@ export const Theme = () => {
 
   useEffect(() => {
     const theme = document.documentElement.dataset.theme as Theme;
+    console.log(theme);
     if (theme) {
       setTheme(theme);
     } else {
