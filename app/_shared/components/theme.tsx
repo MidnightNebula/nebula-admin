@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 
 export const localStorageThemeKey = 'theme';
 
@@ -23,9 +23,10 @@ export const Theme = () => {
     setTheme(newTheme);
   };
 
-  useEffect(() => {
-    const theme = document.documentElement.dataset.theme as Theme;
-    setTheme(theme);
+  useLayoutEffect(() => {
+    const currentTheme = document.documentElement.dataset.theme as Theme;
+
+    setTheme(currentTheme);
   }, []);
 
   if (!theme) return;

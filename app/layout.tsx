@@ -44,7 +44,7 @@ export default async function RootLayout({
           `,
           }}
         />
-        {children}
+        <div className="pr-3.5 pl-3.5">{children}</div>
       </body>
     </html>
   );
