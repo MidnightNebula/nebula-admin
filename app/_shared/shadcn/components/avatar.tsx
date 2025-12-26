@@ -1,8 +1,8 @@
 'use client';
 
-import * as React from 'react';
+import { cn } from '@/_shared/shadcn/lib/utils';
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
-import { cn } from '@/app/_shared/shadcn/lib/utils';
+import * as React from 'react';
 
 function Avatar({ className, ...props }: React.ComponentProps<typeof AvatarPrimitive.Root>) {
   return (
@@ -30,4 +30,4 @@ function AvatarFallback({ className, ...props }: React.ComponentProps<typeof Ava
   );
 }
 
-export { Avatar, AvatarImage, AvatarFallback };
+export { Avatar, AvatarFallback, AvatarImage };

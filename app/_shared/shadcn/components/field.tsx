@@ -1,10 +1,9 @@
 'use client';
 
-import { useMemo } from 'react';
+import { Label } from '@/_shared/shadcn/components/label';
+import { cn } from '@/_shared/shadcn/lib/utils';
 import { cva, type VariantProps } from 'class-variance-authority';
-
-import { Label } from '@/app/_shared/shadcn/components/label';
-import { cn } from '@/app/_shared/shadcn/lib/utils';
+import { useMemo } from 'react';
 
 function FieldSet({ className, ...props }: React.ComponentProps<'fieldset'>) {
   return (
@@ -169,4 +168,4 @@ function FieldError({
   );
 }
 
-export { Field, FieldLabel, FieldError, FieldGroup, FieldLegend, FieldSet, FieldContent, FieldTitle };
+export { Field, FieldContent, FieldError, FieldGroup, FieldLabel, FieldLegend, FieldSet, FieldTitle };

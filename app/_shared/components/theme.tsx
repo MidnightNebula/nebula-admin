@@ -25,13 +25,11 @@ export const Theme = () => {
 
   useEffect(() => {
     const theme = document.documentElement.dataset.theme as Theme;
-    console.log(theme);
-    if (theme) {
-      setTheme(theme);
-    } else {
-      setTheme(ThemeType.light);
-    }
+    setTheme(theme);
   }, []);
+
+  if (!theme) return;
+
   return (
     <>
       <button

@@ -1,13 +1,12 @@
 'use client';
 
+import { Theme } from '@/_shared/components/Theme';
+import { signOut, User } from '@/_shared/lib/auth';
+import { Avatar, AvatarImage } from '@/_shared/shadcn/components/avatar';
+import { Button } from '@/_shared/shadcn/components/button';
 import { useRouter } from 'next/navigation';
 
-import { signOut, User } from '@/app/_shared/lib/auth';
-import { Button } from '@/app/_shared/shadcn/components/button';
-import { Avatar, AvatarImage } from '@/app/_shared/shadcn/components/avatar';
-import { Theme } from '@/app/_shared/components/theme';
-
-export function Header({ user }: { user: User }) {
+export function Header({ user }: { user: User | null }) {
   const router = useRouter();
 
   return (
