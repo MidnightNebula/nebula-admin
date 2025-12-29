@@ -1,51 +1,67 @@
-import { type Errors, getSession, type User } from '@/_shared/lib/auth';
+import { User, authClient, getSession } from '@/_shared/lib/auth';
 import { cookies, headers } from 'next/headers';
 
-type ErrorKey = keyof Errors;
-type ErrorMessage = Errors[ErrorKey];
+const SESSION_TOKEN_NAME = 'better-auth.session_token' as const;
 
-type UserFetchDataType =
-  | { user: User; error: null; isAuthorized: boolean }
-  | {
-      user: null;
-      error: {
-        statusText: ErrorKey | string;
-        message: ErrorMessage | string;
-      };
-      isAuthorized: boolean | null | undefined;
-    };
+const ERRORS = {
+  ...authClient.$ERROR_CODES,
+  NETWORK_NOT_FOUND: 'Network is not found',
+};
 
-export type ReturnUserDataType = Promise<UserFetchDataType>;
+type ReturnDataSession = {
+  user: User | null;
+  error: { code?: string | undefined; message?: string | undefined; status: number; statusText: string } | null;
+  isAuthorized: boolean;
+};
 
-export async function getUser(): ReturnUserDataType {
-  const cookieStore = await cookies();
-  const isAuthorized = cookieStore.has('better-auth.session_token');
+export async function getUser(): Promise<ReturnDataSession> {
+  const { headers, isAuthorized } = await getAuthContext();
 
   try {
     const { data: session, error } = await getSession({
       fetchOptions: {
         credentials: 'include',
-        headers: await headers(),
+        headers,
       },
     });
-
-    if (error) {
-      return { user: null, error: { statusText: error.statusText, message: error.message as string }, isAuthorized };
-    }
 
     if (!session) {
       return {
         user: null,
-        error: {
-          statusText: 'SESSION_EXPIRED',
-          message: 'Session expired. Re-authenticate to perform this action.',
-        },
+        error,
+        isAuthorized: false,
+      };
+    }
+
+    const user = session.user;
+
+    if (error) {
+      return {
+        user,
+        error,
         isAuthorized,
       };
     }
 
-    return { user: session.user, error: null, isAuthorized };
+    return { user, error, isAuthorized };
   } catch (err) {
-    return { user: null, error: { statusText: 'PROVIDER_NOT_FOUND', message: 'Provider not found' }, isAuthorized };
+    return { user: null, error: getError(500, 'NETWORK_NOT_FOUND'), isAuthorized };
   }
+}
+
+const getError = (status: number, statusCode: keyof typeof ERRORS) => {
+  return {
+    status,
+    statusText: statusCode,
+    message: ERRORS[statusCode],
+  };
+};
+
+async function getAuthContext() {
+  const cookieStore = await cookies();
+
+  return {
+    isAuthorized: cookieStore.has(SESSION_TOKEN_NAME),
+    headers: await headers(),
+  };
 }

@@ -1,6 +1,6 @@
-import noRelativeImportPaths from 'eslint-plugin-no-relative-import-paths';
 import nextVitals from 'eslint-config-next/core-web-vitals';
 import prettier from 'eslint-config-prettier/flat';
+import noRelativeImportPaths from 'eslint-plugin-no-relative-import-paths';
 
 import { defineConfig, globalIgnores } from 'eslint/config';
 

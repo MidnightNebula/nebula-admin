@@ -5,16 +5,14 @@ import { redirect } from 'next/navigation';
 
 export default async function Home() {
   const { user, error, isAuthorized } = await getUser();
-  console.log('user:', user);
-  console.log('error:', error?.statusText);
-  console.log('isAuthorized:', isAuthorized);
+  console.log('user 2:', user);
 
-  if (error?.statusText === 'SESSION_EXPIRED' || !isAuthorized) redirect('/login');
+  if (!user && !isAuthorized) redirect('/login');
 
   return (
     <>
       <Header user={user} />
-      {isAuthorized && error ? <ErrorTooltip /> : <div>Hello</div>}
+      {error?.status === 500 && isAuthorized ? <ErrorTooltip /> : <div>Hello</div>}
     </>
   );
 }
