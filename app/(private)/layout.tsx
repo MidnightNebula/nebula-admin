@@ -21,7 +21,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const cookieStore = (await cookies()).has(SESSION_TOKEN_NAME);
 
   try {
-    if (cookieStore) return;
     const { data, error } = await getSession({
       fetchOptions: {
         headers: await headers(),
@@ -34,14 +33,33 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     e = new APIError().status;
   }
 
-  if (!session) {
+  if (!session && !cookieStore) {
     redirect('/login');
   }
 
   return (
     <html lang="en" suppressHydrationWarning>
+      <head />
       <body className={`dark:bg-gray-900 ${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <Header user={session?.user ?? null} />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+            (function() {
+              try {
+                const theme = localStorage.getItem('theme');
+                const defTheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
+                if (theme === 'dark' || (!theme && defTheme)) {
+                  document.documentElement.setAttribute('data-theme', 'dark');
+                } else {
+                  document.documentElement.setAttribute('data-theme', 'light');
+                }
+              } catch (e) {}
+            })();
+          `,
+          }}
+        />
+        <Header user={session?.user} />
+
         {e && <ErrorTooltip error={e} />}
         {children}
       </body>

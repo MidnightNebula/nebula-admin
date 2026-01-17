@@ -7,7 +7,7 @@ import { Button } from '@/_shared/shadcn/components/button';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-export function Header({ user = null }: { user: User | null }) {
+export function Header({ user = null }: { user: User | null | undefined }) {
   const [isMounted, setIsMounted] = useState(false);
   const router = useRouter();
 
