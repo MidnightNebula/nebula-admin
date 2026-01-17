@@ -6,35 +6,39 @@ import { usePathname, useRouter } from 'next/navigation';
 
 const CONTACT_LINK = 'https://discord.com/channels/1352332037335420938/1376701065033945088';
 
-export default function Error({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
+export default function GlobalError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
   const router = useRouter();
   const pathName = usePathname();
 
   return (
-    <div className="flex h-screen items-center justify-center">
-      <Alert
-        variant="destructive"
-        className="flex h-auto w-fit flex-col items-center border-red-400 bg-white text-center shadow-lg dark:border-red-600 dark:bg-gray-900"
-      >
-        <AlertTitle className="pb-2.5 text-red-700 dark:text-red-400">Something wrong</AlertTitle>
-        <AlertDescription className="flex items-center text-center text-gray-700 dark:text-gray-300">
-          <Button
-            onClick={() => {
-              pathName === '/login' ? reset() : router.push('/');
-            }}
-            className="cursor-pointer rounded-2xl bg-linear-to-r from-blue-600 to-indigo-600 px-8 py-3 font-semibold text-white shadow-[0_10px_20px_-10px_rgba(79,70,229,0.5)] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:from-blue-700 hover:to-indigo-700 hover:shadow-[0_15px_25px_-10px_rgba(79,70,229,0.6)] focus:ring-4 focus:ring-indigo-200 focus:outline-none active:translate-y-0 active:scale-95"
+    <html>
+      <body>
+        <div className="flex h-screen items-center justify-center">
+          <Alert
+            variant="destructive"
+            className="flex h-auto w-fit flex-col items-center border-red-400 bg-white text-center shadow-lg dark:border-red-600 dark:bg-gray-900"
           >
-            Return
-          </Button>
+            <AlertTitle className="pb-2.5 text-red-700 dark:text-red-400">Something wrong</AlertTitle>
+            <AlertDescription className="flex items-center text-center text-gray-700 dark:text-gray-300">
+              <Button
+                onClick={() => {
+                  pathName === '/login' ? reset() : router.push('/');
+                }}
+                className="cursor-pointer rounded-2xl bg-linear-to-r from-blue-600 to-indigo-600 px-8 py-3 font-semibold text-white shadow-[0_10px_20px_-10px_rgba(79,70,229,0.5)] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:from-blue-700 hover:to-indigo-700 hover:shadow-[0_15px_25px_-10px_rgba(79,70,229,0.6)] focus:ring-4 focus:ring-indigo-200 focus:outline-none active:translate-y-0 active:scale-95"
+              >
+                Return
+              </Button>
 
-          <Button
-            onClick={() => router.push(CONTACT_LINK)}
-            className="cursor-pointer rounded-2xl border-2 border-slate-100 bg-white px-8 py-3 font-semibold text-slate-600 transition-all duration-300 ease-out hover:border-slate-200 hover:bg-slate-50 hover:text-slate-900 focus:ring-4 focus:ring-slate-100 focus:outline-none active:scale-95"
-          >
-            Contact with us
-          </Button>
-        </AlertDescription>
-      </Alert>
-    </div>
+              <Button
+                onClick={() => router.push(CONTACT_LINK)}
+                className="cursor-pointer rounded-2xl border-2 border-slate-100 bg-white px-8 py-3 font-semibold text-slate-600 transition-all duration-300 ease-out hover:border-slate-200 hover:bg-slate-50 hover:text-slate-900 focus:ring-4 focus:ring-slate-100 focus:outline-none active:scale-95"
+              >
+                Contact with us
+              </Button>
+            </AlertDescription>
+          </Alert>
+        </div>
+      </body>
+    </html>
   );
 }
