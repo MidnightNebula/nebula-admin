@@ -11,6 +11,15 @@ export function Header({ user = null }: { user: User | null }) {
   const isMounted = useMounted();
   const router = useRouter();
 
+  function logOut() {
+    signOut({
+      fetchOptions: {
+        onSuccess: () => router.push('/login'),
+        onError: () => console.log('Server is not active'),
+      },
+    });
+  }
+
   return (
     <>
       <div
@@ -19,18 +28,7 @@ export function Header({ user = null }: { user: User | null }) {
         <Theme />
         {user && (
           <>
-            <Button
-              onClick={() =>
-                signOut({
-                  fetchOptions: {
-                    onSuccess: () => router.push('/login'),
-                    onError: () => console.log('Server is not active'),
-                  },
-                })
-              }
-            >
-              Sign Out
-            </Button>
+            <Button onClick={logOut}>Sign Out</Button>
             <Avatar>
               <AvatarImage
                 src={user.image || `https://cdn.discordapp.com/embed/avatars/${(Number(user.id) >> 22) % 6}.png`}
