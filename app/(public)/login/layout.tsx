@@ -1,6 +1,7 @@
 import { CenterContainer } from '@/_shared/components/CenterContainer';
 import { geistMono, geistSans } from '@/_shared/fonts/fonts';
 import '@/globals.css';
+import Script from 'next/script';
 
 export default function Layout({
   children,
@@ -11,23 +12,7 @@ export default function Layout({
     <html lang="en" suppressHydrationWarning>
       <head />
       <body className={`dark:bg-gray-900 ${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-            (function() {
-              try {
-                const theme = localStorage.getItem('theme');
-                const defTheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
-                if (theme === 'dark' || (!theme && defTheme)) {
-                  document.documentElement.setAttribute('data-theme', 'dark');
-                } else {
-                  document.documentElement.setAttribute('data-theme', 'light');
-                }
-              } catch (e) {}
-            })();
-          `,
-          }}
-        />
+        <Script src="/app/_shared/lib/setTheme.ts" strategy="beforeInteractive" />
         <CenterContainer>{children}</CenterContainer>
       </body>
     </html>
