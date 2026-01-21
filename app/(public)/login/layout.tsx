@@ -1,3 +1,4 @@
+import { CenterContainer } from '@/_shared/components/CenterContainer';
 import { geistMono, geistSans } from '@/_shared/fonts/fonts';
 import '@/globals.css';
 
@@ -27,13 +28,7 @@ export default function Layout({
           `,
           }}
         />
-        <div className="grid min-h-svh items-center">
-          <div className="flex flex-col gap-4 p-6 md:p-10">
-            <div className="flex flex-1 items-center justify-center">
-              <div className="w-full max-w-xs">{children}</div>
-            </div>
-          </div>
-        </div>
+        <CenterContainer>{children}</CenterContainer>
       </body>
     </html>
   );
