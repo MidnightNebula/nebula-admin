@@ -6,40 +6,39 @@ import { Alert, AlertTitle } from '@/_shared/shadcn/components/alert';
 import { Button } from '@/_shared/shadcn/components/button';
 import { Field, FieldGroup } from '@/_shared/shadcn/components/field';
 import { cn } from '@/_shared/shadcn/lib/utils';
+import { APIError } from 'better-auth';
 import { useState } from 'react';
 
 export function LoginForm({ className, ...props }: React.ComponentProps<'form'>) {
   const [isPending, setIsPending] = useState(false);
   const [error, setIsError] = useState<string | null>(null);
 
-  return (
-    <form
-      className={cn('flex flex-col gap-6', className)}
-      {...props}
-      onSubmit={async (e) => {
-        e.preventDefault();
-        setIsError(null);
-        try {
-          await signIn.social(
-            {
-              provider: 'discord',
-              callbackURL: window.location.origin,
-            },
-            {
-              onRequest: () => setIsPending(true),
-              onSuccess: () => setIsPending(false),
-              onError: (error) => {
-                setIsError(error.error.message);
-                setIsPending(false);
-              },
-            }
-          );
-        } catch (error) {
-          setIsPending(false);
-          setIsError('Fetching is error');
+  async function onSubmit(e: any) {
+    e.preventDefault();
+    setIsError(null);
+    try {
+      await signIn.social(
+        {
+          provider: 'discord',
+          callbackURL: window.location.origin,
+        },
+        {
+          onRequest: () => setIsPending(true),
+          onSuccess: () => setIsPending(false),
+          onError: (error) => {
+            setIsError(error.error.message);
+            setIsPending(false);
+          },
         }
-      }}
-    >
+      );
+    } catch (error) {
+      setIsPending(false);
+      setIsError(String(new APIError().status));
+    }
+  }
+
+  return (
+    <form className={cn('flex flex-col gap-6', className)} {...props} onSubmit={onSubmit}>
       <FieldGroup>
         <div className="flex flex-col items-center gap-1 text-center">
           <h1 className="text-2xl font-bold">Login to your account with Discord</h1>
