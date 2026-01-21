@@ -1,21 +1,15 @@
 'use client';
 
 import { Theme } from '@/_shared/components/Theme';
+import { useMounted } from '@/_shared/hooks/useMounted';
 import { signOut, User } from '@/_shared/lib/auth';
 import { Avatar, AvatarImage } from '@/_shared/shadcn/components/avatar';
 import { Button } from '@/_shared/shadcn/components/button';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
 
 export function Header({ user = null }: { user: User | null }) {
-  const [isMounted, setIsMounted] = useState(false);
+  const isMounted = useMounted();
   const router = useRouter();
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setIsMounted(true);
-    }
-  }, []);
 
   return (
     <>
